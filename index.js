@@ -174,7 +174,8 @@ function animate() {
         rectangle2: enemy
     }) && player.isattacking) {
         player.isattacking = false;
-        console.log('player hit enemy');
+        document.querySelector('#enemyHealth').style.width = '20%';
+        // console.log('player hit enemy');
     }
 
 
@@ -227,7 +228,8 @@ window.addEventListener('keydown', (event) => {
                 enemy.velocity.y = -20;
             break;
         case 'ArrowDown':
-            enemy.isattacking = true;
+            enemy.attacking();
+            break;
     }
     console.log(event.key);
 });
