@@ -109,7 +109,7 @@ function decreaseTimer(){
         document.querySelector('#timer').innerHTML=timer;
     }
     if(player.health === enemy.health){
-        console.log('DRAW');
+        console.log('DRAWh');
     }
 }
 
