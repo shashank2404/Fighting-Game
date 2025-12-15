@@ -30,6 +30,7 @@ class sprite {
             height: 50,
         };
         this.colour = colour;
+        this.health = 100;
         this.isattacking;
 
     }
@@ -72,7 +73,7 @@ class sprite {
         this.isattacking = true;
         setTimeout(() => {
             this.isattacking = false;
-        }, 300)
+        }, 100)
     }
 }
 //create a player instance
@@ -98,6 +99,18 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
         && rectangle1.postion.y + rectangle1.height >= rectangle2.postion.y
         && rectangle1.postion.y <= rectangle2.postion.y + rectangle2.height
     )
+}
+
+let timer = 10;
+function decreaseTimer(){
+    if(timer>0){
+        setTimeout(decreaseTimer,1000);
+        timer--;
+        document.querySelector('#timer').innerHTML=timer;
+    }
+    if(player.health === enemy.health){
+        console.log('DRAW');
+    }
 }
 
 //create enemy instance
@@ -174,7 +187,8 @@ function animate() {
         rectangle2: enemy
     }) && player.isattacking) {
         player.isattacking = false;
-        document.querySelector('#enemyHealth').style.width = '20%';
+        enemy.health -= 20;
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%';
         // console.log('player hit enemy');
     }
 
@@ -188,7 +202,9 @@ function animate() {
         rectangle2: player
     }) && enemy.isattacking) {
         enemy.isattacking = false;
-        console.log('enemy hit player');
+        player.health -= 20;
+       document.querySelector('#playerHealth').style.width = player.health + '%';
+        // console.log('enemy hit player');
     }
 
 }

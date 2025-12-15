@@ -1,29 +1,52 @@
 <head>
     <style>
-        *{
+        * {
             box-sizing: border-box;
         }
     </style>
 </head>
 
 <body>
-    <div style="position: relative; display: inline-block;" >
-        <div style="position: absolute;display: flex; width: 100%; padding: 20px;align-items: center;">
-           <!-- //player health bar -->
-            <div style=" background-color: #eb2e0cef; height: 30px; width: 100%; "></div>
-           <!-- //game timer -->
-            <div style="background-color: rgb(17, 5, 104); height: 100px; width: 100px; flex-shrink: 0;"></div>
-          <!-- //enemy health bar -->
-            <div style="position: relative;height: 30px; width: 100%;">
-                <div 
-             style="background-color: rgb(248, 37, 0); height: 30px;"></div>
-             <div
-             id="enemyHealth"
-             style="position: absolute; background: blue; top: 0; left: 0;bottom: 0;right: 0;"></div>
+
+    <div style="position: relative; display: inline-block;">
+
+        <!-- UI BAR -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; padding: 20px; display: flex; align-items: center;">
+
+            <!-- Player Health -->
+            <div style="position: relative; height: 30px; width: 100%;display: flex;justify-content: flex-end;">
+                <div style="background-color: rgb(248, 37, 0); height: 30px;width: 100%;"></div>
+                <div
+                    id="playerHealth"
+                    style="position: absolute; background: blue; top: 0; width: 100%; bottom: 0; right: 0;">
+                </div>
             </div>
+
+            <!-- Timer -->
+            <div id="Timer"
+             style="background-color: rgb(95, 92, 115); height: 100px; width: 100px; flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            ">
+                10
+            </div>
+
+            <!-- Enemy Health -->
+            <div style="position: relative; height: 30px; width: 100%;">
+                <div style="background-color: rgb(248, 37, 0); height: 30px;"></div>
+                <div
+                    id="enemyHealth"
+                    style="position: absolute; background: blue; top: 0; left: 0; bottom: 0; right: 0;">
+                </div>
+            </div>
+
         </div>
+
+        <!-- Canvas -->
         <canvas></canvas>
-       
+
     </div>
-     <script src="index.js"></script>
+
+    <script src="index.js"></script>
 </body>
