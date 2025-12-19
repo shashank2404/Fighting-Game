@@ -101,17 +101,6 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
     )
 }
 
-let timer = 10;
-function decreaseTimer(){
-    if(timer>0){
-        setTimeout(decreaseTimer,1000);
-        timer--;
-        document.querySelector('#timer').innerHTML=timer;
-    }
-    if(player.health === enemy.health){
-        console.log('DRAWh');
-    }
-}
 
 //create enemy instance
 const enemy = new sprite({
@@ -149,6 +138,34 @@ const key = {
         pressed: false
     }
 }
+
+function determinwinner({player, enemy,timerID}) {
+    clearTimeout(timerID);
+     document.querySelector('#displayText').style.display='flex';
+    if(player.health === enemy.health){
+       document.querySelector('#displayText').innerHTML='Tie';
+    }
+    else if(player.health > enemy.health){
+        document.querySelector('#displayText').innerHTML='Player 1 Wins';
+    }
+    else if(enemy.health > player.health){
+        document.querySelector('#displayText').innerHTML='Player 2 Wins';
+    }
+}
+
+let timer = 10;
+let timerID;
+function decreaseTimer(){
+    if(timer>0){
+        timerID = setTimeout(decreaseTimer,1000);
+        timer--;
+        document.querySelector('#timer').innerHTML=timer;
+    }
+   if(timer=== 0) {
+        determinwinner({player, enemy,timerID});
+}
+}
+decreaseTimer();
 let lastKey;
 //animation loop
 function animate() {
@@ -164,18 +181,18 @@ function animate() {
     enemy.velocity.x = 0;
     //move player
     if (key.a.pressed && lastKey === 'a') {
-        player.velocity.x = -3;
+        player.velocity.x = -5;
     }
     else if (key.d.pressed && lastKey === 'd') {
-        player.velocity.x = 3;
+        player.velocity.x = 5;
     }
 
     //enemy movement
     if (key.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -3;
+        enemy.velocity.x = -5;
     }
     else if (key.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = 3;
+        enemy.velocity.x = 5;
     }
     // detect attack box position
     if (rectangleCollision({
@@ -207,6 +224,11 @@ function animate() {
         // console.log('enemy hit player');
     }
 
+    //end game based on health
+    if(enemy.health <= 0 || player.health <=0){
+        determinwinner({player, enemy,timerID});
+    }
+
 }
 
 animate();
@@ -225,7 +247,7 @@ window.addEventListener('keydown', (event) => {
             break;
         case 'w':
             if (player.velocity.y === 0)
-                player.velocity.y = -20;
+                player.velocity.y = -15;
             break;
         case ' ':
             player.attacking();
@@ -241,7 +263,7 @@ window.addEventListener('keydown', (event) => {
             break;
         case 'ArrowUp':
             if (enemy.velocity.y === 0)
-                enemy.velocity.y = -20;
+                enemy.velocity.y = -15;
             break;
         case 'ArrowDown':
             enemy.attacking();
