@@ -14,71 +14,28 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 console.log('World setup complete');
 
-class sprite {
-    constructor({ postion, velocity, colour = 'black', offset }) {
-        this.postion = postion;
-        this.velocity = velocity;
-        this.height = 150;
-        this.width = 50;
-        this.attackBox = {
-            postion: {
-                x: this.postion.x,
-                y: this.postion.y,
-            },
-            offset,
-            width: 100,
-            height: 50,
-        };
-        this.colour = colour;
-        this.health = 100;
-        this.isattacking;
+const background =  new Sprite({
+    position : {
+        x:0,
+        y: 0,
+    },
+    imageSrc: './Assests/background/background.png'
 
-    }
-    //create a draw method
-    draw() {
-        c.fillStyle = this.colour;
-        c.fillRect(this.postion.x, this.postion.y, 50, 150);
+});
 
-        //update attack box position
-        this.attackBox.postion.x = this.postion.x - this.attackBox.offset.x;
-        this.attackBox.postion.y = this.postion.y;
-        //attackBox
-        if (this.isattacking) {
-            c.fillStyle = 'green';
-            c.fillRect(
-                this.attackBox.postion.x,
-                this.attackBox.postion.y,
-                this.attackBox.width,
-                this.attackBox.height
-            )
-        }
-    }
-    ///update method
-    update() {
-        this.draw();
-        //horizontal movement
-        this.postion.x += this.velocity.x;
-        //vertical movement
-        this.postion.y += this.velocity.y;
+const shop = new Sprite({
+  position: {
+    x: 600,
+    y: 128
+  },
+  imageSrc: './Assests/decorations/shop_anim.png',
+  scale: 2.75,
+  framesMax: 6
+});
 
-        //floor collision
-        if (this.postion.y + this.height + this.velocity.y >= canvas.height) {
-            this.velocity.y = 0;
-        }
-        else {
-            this.velocity.y += gravity;
-        }
-    }
-    attacking() {
-        this.isattacking = true;
-        setTimeout(() => {
-            this.isattacking = false;
-        }, 100)
-    }
-}
 //create a player instance
-const player = new sprite({
-    postion: {
+const player = new Fighter({
+    position: {
         x: 0,
         y: 0,
     },
@@ -89,22 +46,16 @@ const player = new sprite({
     offset: {
         x: 0,
         y: 0,
-    }
+    },
+    imageSrc: './samurai/Sprites/Idle.png',
+    framesMax: 8,
 });
 
-function rectangleCollision({ rectangle1, rectangle2 }) {
-    return (
-        rectangle1.postion.x + rectangle1.width >= rectangle2.postion.x
-        && rectangle1.postion.x <= rectangle2.postion.x + rectangle2.width
-        && rectangle1.postion.y + rectangle1.height >= rectangle2.postion.y
-        && rectangle1.postion.y <= rectangle2.postion.y + rectangle2.height
-    )
-}
 
 
 //create enemy instance
-const enemy = new sprite({
-    postion: {
+const enemy = new Fighter({
+    position: {
         x: 400,
         y: 150,
     },
@@ -116,7 +67,10 @@ const enemy = new sprite({
     offset: {
         x: 50,
         y: 0,
-    }
+    },
+    
+    imageSrc: './samurai/Sprites/Idle.png',
+    framesMax: 8,
 })
 
 player.draw();
@@ -139,40 +93,19 @@ const key = {
     }
 }
 
-function determinwinner({player, enemy,timerID}) {
-    clearTimeout(timerID);
-     document.querySelector('#displayText').style.display='flex';
-    if(player.health === enemy.health){
-       document.querySelector('#displayText').innerHTML='Tie';
-    }
-    else if(player.health > enemy.health){
-        document.querySelector('#displayText').innerHTML='Player 1 Wins';
-    }
-    else if(enemy.health > player.health){
-        document.querySelector('#displayText').innerHTML='Player 2 Wins';
-    }
-}
 
-let timer = 10;
-let timerID;
-function decreaseTimer(){
-    if(timer>0){
-        timerID = setTimeout(decreaseTimer,1000);
-        timer--;
-        document.querySelector('#timer').innerHTML=timer;
-    }
-   if(timer=== 0) {
-        determinwinner({player, enemy,timerID});
-}
-}
-decreaseTimer();
 let lastKey;
+
+decreaseTimer();
+
 //animation loop
 function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = 'beige';
     c.fillRect(0, 0, canvas.width, canvas.height);
 
+    background.update();
+    shop.update();
     player.update();
     enemy.update();
     //console.log('animation loop running');
@@ -197,7 +130,7 @@ function animate() {
     // detect attack box position
     if (rectangleCollision({
         rectangle1: {
-            postion: player.attackBox.postion,
+            position: player.attackBox.position,
             width: player.attackBox.width,
             height: player.attackBox.height
         },
@@ -212,7 +145,7 @@ function animate() {
 
     if (rectangleCollision({
         rectangle1: {
-            postion: enemy.attackBox.postion,
+            position: enemy.attackBox.position,
             width: enemy.attackBox.width,
             height: enemy.attackBox.height
         },
